@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+@theme {
+  --color-neutral-900: hsl(233, 18%, 9%);
+  --color-neutral-800: hsl(235, 14%, 15%);
+  --color-neutral-700: hsl(235, 13%, 19%);
+  --color-neutral-600: hsl(234, 14%, 29%);
+  --color-neutral-200: hsl(240, 26%, 92%);
+  --color-neutral-100: hsl(240, 24%, 96%);
+  --color-neutral-0: hsl(0, 0, 100%);
+
+  --color-purple-500: hsl(274, 90%, 73%);
+  --color-purple-400: hsl(274, 90%, 80%);
+  --color-yellow-500: hsl(37, 100%, 50%);
+  --color-orange-500: hsl(15, 99%, 67%);
+  --color-orange-800: hsl(15, 99%, 43%);
+}
+
+:root {
+  font-family: "DM Sans", sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  font-optical-sizing: auto;
+  font-style: normal;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: var(--color-neutral-900);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 4rem;
+  line-height: 100%;
+  letter-spacing: -1px;
+}
+
+h2 {
+  font-size: 1.5rem;
+  line-height: 130%;
+  letter-spacing: -1px;
+}
+
+h3 {
+  font-size: 1.25rem;
+  line-height: 140%;
+  letter-spacing: -0.6px;
+}
+
+h4 {
+  font-size: 1rem;
+  line-height: 130%;
+  letter-spacing: -0.6px;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+}
