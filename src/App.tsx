@@ -18,6 +18,9 @@ function App() {
     wordCount: 0,
   });
   const [allDensitiesShown, setAllShowing] = useState<boolean>(false);
+  const [showCharLimitInput, setShowCharLimitInput] = useState<boolean>(false);
+  const [charLimit, setCharLimit] = useState<number | undefined>();
+  const [minutesToRead, setMinutesNeeded] = useState<number>(1);
 
   return (
     <main>
@@ -36,12 +39,37 @@ function App() {
       </h1>
       <form
         onChange={(e) => {
+          const averageWordsReadPerMinute = 238;
+          const input = e.target as HTMLInputElement;
+          const inputId = input.id;
+
           const textareaInput: HTMLTextAreaElement | null =
             e.currentTarget.querySelector("#word-input");
-          const content = textareaInput?.value;
+
+          const chExcludeSpaces: HTMLInputElement | null =
+            e.currentTarget.querySelector("#ch_exclude_spaces");
+          let content = textareaInput?.value || "";
+
+          if (inputId === "ch_limit") {
+            setShowCharLimitInput(!showCharLimitInput);
+          } else if (inputId === "input_char_limit") {
+            const limit = Number.parseInt(input.value);
+
+            if (!Number.isNaN(limit) && textareaInput) {
+              setCharLimit(limit);
+              content = content.substring(0, limit);
+              textareaInput.value = content;
+            }
+          }
+
           if (content) {
+            content = chExcludeSpaces?.checked
+              ? content.replaceAll(" ", "")
+              : content;
+
             const totalChars = content.length;
             const wordCount = content.split(" ").length;
+            setMinutesNeeded(Math.ceil(wordCount / averageWordsReadPerMinute));
             const sentenceCount = content.split(".").length;
 
             let letters = content.split("");
@@ -76,12 +104,13 @@ function App() {
           className="resize-none w-full h-[200px] p-5 border border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600 focus:bg-neutral-800
          focus:outline-purple-500 focus:outline-2 focus:border-purple-500 rounded-xl mb-4"
           placeholder="Start typing here... (or paste your text)"
+          maxLength={charLimit}
         />
 
         <section className="flex justify-between mb-10">
-          <section className="flex gap-6">
-            <input id="ch_spaces" name="spaces" type="checkbox" />
-            <label htmlFor="ch_spaces" className="inline-flex gap-2">
+          <section className="flex gap-6 items-center">
+            <input id="ch_exclude_spaces" name="spaces" type="checkbox" />
+            <label htmlFor="ch_exclude_spaces" className="inline-flex gap-2">
               Exclude spaces
             </label>
 
@@ -89,8 +118,18 @@ function App() {
             <label htmlFor="ch_limit" className="inline-flex gap-2">
               Set character limit
             </label>
+
+            {showCharLimitInput && (
+              <input
+                id="input_char_limit"
+                type="number"
+                value={charLimit}
+                className="px-5 py-2.5 w-24 border border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600 focus:bg-neutral-800
+         focus:outline-purple-500 focus:outline-2 focus:border-purple-500 rounded-xl"
+              />
+            )}
           </section>
-          <p>Approx. reading time: less than 1min</p>
+          <p>Approx. reading time: less than {minutesToRead}min</p>
         </section>
 
         <section className="grid grid-cols-3 gap-4 mb-10">
