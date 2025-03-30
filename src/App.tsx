@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import lightIcon from "./assets/light.svg";
+import darkIcon from "./assets/dark.svg";
 import shape1 from "./assets/shape-1.svg";
 import shape2 from "./assets/Shape-2.svg";
 import shape3 from "./assets/shape-3.svg";
@@ -21,19 +22,43 @@ function App() {
   const [showCharLimitInput, setShowCharLimitInput] = useState<boolean>(false);
   const [charLimit, setCharLimit] = useState<number | undefined>();
   const [minutesToRead, setMinutesNeeded] = useState<number>(1);
+  const [theme, setTheme] = useState<"light" | "dark">("dark");
+
+  useEffect(() => {
+    if (localStorage.getItem("theme") === "dark") {
+      document.documentElement.classList.add("dark");
+      setTheme("dark");
+    } else {
+      setTheme("light");
+    }
+  }, []);
 
   return (
     <main>
-      <section className="flex justify-between">
+      <section className="flex justify-between items-center">
         <section className="flex gap-2 items-center py-4.5">
           <div className="h-10 w-10 bg-[url(logo-dark.svg)] bg-contain bg-no-repeat"></div>
-          <p>Character Counter</p>
+          <p className="text-neutral-900 dark:text-white">Character Counter</p>
         </section>
-        <button className="inline-flex justify-center items-center h-11 w-11 bg-neutral-700 rounded-lg hover:cursor-pointer">
-          <img className="w-6 h-6" src={lightIcon} />
+
+        <button
+          className="inline-flex justify-center items-center h-11 w-11 dark:bg-neutral-700 bg-neutral-100 rounded-lg hover:cursor-pointer"
+          onClick={() => {
+            const docElement = document.documentElement;
+            const themeId = docElement.classList.toggle("dark")
+              ? "dark"
+              : "light";
+            setTheme(themeId);
+            localStorage.setItem("theme", themeId ? "dark" : "light");
+          }}
+        >
+          <img
+            className="w-6 h-6 not-dark:invert"
+            src={theme === "dark" ? darkIcon : lightIcon}
+          />
         </button>
       </section>
-      <h1 className="mb-10 text-center">
+      <h1 className="mb-10 text-center text-neutral-900 dark:text-white">
         Analyze your text in
         <br /> real-time
       </h1>
@@ -101,21 +126,37 @@ function App() {
         <textarea
           id="word-input"
           name="word-input"
-          className="resize-none w-full h-[200px] p-5 border border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600 focus:bg-neutral-800
-         focus:outline-purple-500 focus:outline-2 focus:border-purple-500 rounded-xl mb-4"
+          className="resize-none w-full h-[200px] p-5 border dark:border-neutral-700 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:hover:border-neutral-600 dark:focus:bg-neutral-800
+         focus:outline-purple-500 focus:outline-2 focus:border-purple-500 rounded-xl mb-4 bg-neutral-100 text-neutral-700 dark:text-white"
           placeholder="Start typing here... (or paste your text)"
           maxLength={charLimit}
         />
 
         <section className="flex justify-between mb-10">
           <section className="flex gap-6 items-center">
-            <input id="ch_exclude_spaces" name="spaces" type="checkbox" />
-            <label htmlFor="ch_exclude_spaces" className="inline-flex gap-2">
+            <label
+              htmlFor="ch_exclude_spaces"
+              className="inline-flex gap-2 text-neutral-900 dark:text-white"
+            >
+              <input
+                id="ch_exclude_spaces"
+                name="spaces"
+                type="checkbox"
+                className="bg-neutral-100 dark:bg-neutral-800"
+              />
               Exclude spaces
             </label>
 
-            <input id="ch_limit" name="limit" type="checkbox" />
-            <label htmlFor="ch_limit" className="inline-flex gap-2">
+            <label
+              htmlFor="ch_limit"
+              className="inline-flex gap-2 text-neutral-900 dark:text-white"
+            >
+              <input
+                id="ch_limit"
+                name="limit"
+                type="checkbox"
+                className="bg-neutral-100 dark:bg-neutral-800"
+              />
               Set character limit
             </label>
 
@@ -124,12 +165,14 @@ function App() {
                 id="input_char_limit"
                 type="number"
                 value={charLimit}
-                className="px-5 py-2.5 w-24 border border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-neutral-600 focus:bg-neutral-800
-         focus:outline-purple-500 focus:outline-2 focus:border-purple-500 rounded-xl"
+                className="px-5 py-2.5 w-24 border border-neutral-700 bg-neutral-100 dark:bg-neutral-800 
+         focus:outline-purple-500 focus:outline-2 focus:border-purple-500 rounded-xl text-neutral-900 dark:text-white "
               />
             )}
           </section>
-          <p>Approx. reading time: less than {minutesToRead}min</p>
+          <p className="text-neutral-900 dark:text-white">
+            Approx. reading time: less than {minutesToRead}min
+          </p>
         </section>
 
         <section className="grid grid-cols-3 gap-4 mb-10">
@@ -169,10 +212,10 @@ function App() {
             .map(({ letter, percentage, count }) => (
               <section
                 key={letter}
-                className="grid grid-cols-[1rem_auto_6rem] gap-4 items-center"
+                className="grid grid-cols-[1rem_auto_6rem] gap-4 items-center text-neutral-900 dark:text-white"
               >
-                <p className="w-4">{letter}</p>
-                <div className="relative w-full h-3 bg-neutral-800 rounded-full overflow-hidden">
+                <p className="w-4 ">{letter}</p>
+                <div className="relative w-full h-3 bg-neutral-100 dark:bg-neutral-800 rounded-full overflow-hidden">
                   <div
                     style={{
                       width: `${percentage}%`,
@@ -190,7 +233,11 @@ function App() {
             ))}
         </section>
 
-        <button type="button" onClick={() => setAllShowing(!allDensitiesShown)}>
+        <button
+          type="button"
+          className="text-neutral-900 dark:text-white"
+          onClick={() => setAllShowing(!allDensitiesShown)}
+        >
           {allDensitiesShown ? "See less" : "See more"}{" "}
           {allDensitiesShown ? <span>^</span> : <span>V</span>}{" "}
         </button>
