@@ -132,8 +132,8 @@ function App() {
           maxLength={charLimit}
         />
 
-        <section className="flex justify-between mb-10">
-          <section className="flex gap-6 items-center">
+        <section className="flex justify-between mb-10 max-md:flex-col">
+          <section className="flex gap-2 items-center max-md:flex-col max-md:items-start max-md:mb-10 ">
             <label
               htmlFor="ch_exclude_spaces"
               className="inline-flex gap-2 text-neutral-900 dark:text-white"
@@ -175,7 +175,7 @@ function App() {
           </p>
         </section>
 
-        <section className="grid grid-cols-3 gap-4 mb-10">
+        <section className="grid grid-cols-3 max-md:grid-cols-1 gap-4 mb-10">
           <div className="relative py-6 px-3 bg-purple-500 rounded-xl text-black overflow-hidden">
             <h1 className="mb-2 font-bold">{metrics.totalChars}</h1>
             <h3>Total Characters</h3>
